@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Donlot video tt">
+  <meta name="description" content="Download video TikTok tanpa watermark">
   <meta property="og:image" content="https://i.imgflip.com/6xknc8.jpg">
   <title>Download Video TikTok</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -23,6 +23,24 @@
     .fadeIn {
       animation: fadeIn 1s ease-in-out;
     }
+
+    .profile {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+
+    .music-info {
+      font-size: 0.875rem;
+      color: #d1d5db;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 
@@ -32,7 +50,7 @@
 
     <div class="max-w-lg mx-auto bg-gray-800 p-8 rounded-xl shadow-xl">
       <h1 class="text-3xl font-bold text-center text-white mb-6">Download Video TikTok</h1>
-      <p class="text-1xl font-bold text-center text-white mb-6">made by adjidev</p>
+      <p class="text-1xl font-bold text-center text-white mb-6">Made by Adjidev</p>
 
       <input id="urlInput" type="text" class="w-full p-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 bg-gray-900 text-white placeholder-gray-400" placeholder="Masukkan URL TikTok">
 
@@ -41,14 +59,23 @@
       </button>
 
       <div id="videoInfo" class="hidden mt-6">
-        <div class="text-center mb-4">
+        <div class="flex items-center mb-4 space-x-4">
+          <img id="authorAvatar" class="profile" alt="Author Avatar">
+          <div>
+            <p id="authorName" class="text-lg font-semibold text-white"></p>
+            <p id="authorNickname" class="text-sm text-gray-400"></p>
+          </div>
         </div>
+
         <h2 id="videoTitle" class="text-xl font-semibold text-white mb-2"></h2>
         <p id="videoDuration" class="text-gray-400 mb-4"></p>
 
-        <!-- Video Preview -->
         <div class="mb-4">
-          <video id="videoPreview" class="w-full rounded-lg" controls></video>
+          <video id="videoPreview" class="w-full rounded-lg" autoplay muted loop></video>
+        </div>
+
+        <div class="music-info mb-4">
+          <p><strong>Musik:</strong> <span id="musicTitle"></span> - <span id="musicAuthor"></span></p>
         </div>
 
         <div class="flex justify-center gap-4">
@@ -82,10 +109,16 @@
         document.getElementById('videoTitle').textContent = data.data.title;
         document.getElementById('videoDuration').textContent = `Durasi: ${data.data.duration}`;
 
-        // Update video preview
         const videoUrlNoWM = data.data.data.find(d => d.type === 'nowatermark').url;
         const videoPreview = document.getElementById('videoPreview');
         videoPreview.src = videoUrlNoWM;
+
+        document.getElementById('musicTitle').textContent = data.data.music_info.title;
+        document.getElementById('musicAuthor').textContent = data.data.music_info.author;
+
+        document.getElementById('authorAvatar').src = data.data.author.avatar;
+        document.getElementById('authorName').textContent = data.data.author.fullname;
+        document.getElementById('authorNickname').textContent = `@${data.data.author.nickname}`;
 
         document.getElementById('downloadNoWM').href = videoUrlNoWM;
         document.getElementById('downloadWM').href = data.data.data.find(d => d.type === 'watermark').url;
