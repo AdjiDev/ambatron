@@ -42,10 +42,14 @@
 
       <div id="videoInfo" class="hidden mt-6">
         <div class="text-center mb-4">
-          <img id="videoCover" class="w-full rounded-lg" alt="Video Cover">
         </div>
         <h2 id="videoTitle" class="text-xl font-semibold text-white mb-2"></h2>
         <p id="videoDuration" class="text-gray-400 mb-4"></p>
+
+        <!-- Video Preview -->
+        <div class="mb-4">
+          <video id="videoPreview" class="w-full rounded-lg" controls></video>
+        </div>
 
         <div class="flex justify-center gap-4">
           <a id="downloadNoWM" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300" href="" download>Download Tanpa Watermark</a>
@@ -77,9 +81,13 @@
         document.getElementById('videoInfo').classList.remove('hidden');
         document.getElementById('videoTitle').textContent = data.data.title;
         document.getElementById('videoDuration').textContent = `Durasi: ${data.data.duration}`;
-        document.getElementById('videoCover').src = data.data.cover;
 
-        document.getElementById('downloadNoWM').href = data.data.data.find(d => d.type === 'nowatermark').url;
+        // Update video preview
+        const videoUrlNoWM = data.data.data.find(d => d.type === 'nowatermark').url;
+        const videoPreview = document.getElementById('videoPreview');
+        videoPreview.src = videoUrlNoWM;
+
+        document.getElementById('downloadNoWM').href = videoUrlNoWM;
         document.getElementById('downloadWM').href = data.data.data.find(d => d.type === 'watermark').url;
 
         const buttons = document.querySelectorAll('a');
